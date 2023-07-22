@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateDateLinesample", "CalculateDateLinesample\CalculateDateLinesample.csproj", "{B3BC7D92-C983-4936-9929-C1F0ACFD725D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3BC7D92-C983-4936-9929-C1F0ACFD725D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3BC7D92-C983-4936-9929-C1F0ACFD725D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3BC7D92-C983-4936-9929-C1F0ACFD725D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3BC7D92-C983-4936-9929-C1F0ACFD725D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01E22E98-A8F8-4BB4-84A1-7B00ECC5E601}
+	EndGlobalSection
+EndGlobal
