@@ -103,8 +103,8 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         var dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == endDate.DayOfWeek);
 
         // Set the start and end hours and the lunch break for the current working day
-        DateTime startHour = CombineWithHour(endDate, dayOfWeekSetting.WorkingHourStart);
-        DateTime endHour = CombineWithHour(endDate, dayOfWeekSetting.WorkingHourEnd);
+        DateTime startWorkingHour = CombineWithHour(endDate, dayOfWeekSetting.WorkingHourStart);
+        DateTime endWorkingHour = CombineWithHour(endDate, dayOfWeekSetting.WorkingHourEnd);
         DateTime breakStart = CombineWithHour(endDate, dayOfWeekSetting.BreakHourStart);
         DateTime breakEnd = CombineWithHour(endDate, dayOfWeekSetting.BreakHourEnd);
         double hoursBreak = dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
@@ -114,7 +114,7 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         if (endDate.DayOfWeek != DayOfWeek.Saturday && endDate.DayOfWeek != DayOfWeek.Sunday)
         {
             // Calculate the remaining minutes for the current working day
-            TimeSpan remainingWorkingMinutes = endHour - endDate - (breakEnd - breakStart);
+            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate - (breakEnd - breakStart);
 
             if (remainingWorkingMinutes.TotalMinutes >= minutes)
             {
@@ -138,7 +138,7 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         else if (endDate.DayOfWeek == DayOfWeek.Saturday)
         {
             // Calculate the remaining minutes for Saturday
-            TimeSpan remainingWorkingMinutes = endHour - endDate - (breakEnd - breakStart);
+            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate - (breakEnd - breakStart);
 
             if (remainingWorkingMinutes.TotalMinutes >= minutes)
             {
