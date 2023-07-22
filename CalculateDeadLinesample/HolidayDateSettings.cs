@@ -1,4 +1,4 @@
-﻿namespace CalculateDateLinesample
+﻿namespace CalculateDeadLinesample
 {
     public class HolidayDateSetting
     {

@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using CalculateDateLinesample;
+using CalculateDeadLinesample;
 
 List<WorkingHourSetting> workingHourSettings = new List<WorkingHourSetting>()
 {
