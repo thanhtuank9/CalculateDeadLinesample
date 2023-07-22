@@ -45,6 +45,15 @@ while(_continue == "y")
 
         Console.WriteLine("Start processing....");
         DateTime endDate = CalculateEndTime(startDate, minutes);
+
+        // Check if exist holiday in first period
+        var totalHolidays = TotalHolidays(startDate, endDate);
+        if(totalHolidays > 0)
+        {
+            endDate = endDate.AddDays(totalHolidays);
+        }
+
+        // extend if endDate is holiday
         while (IsHoliday(endDate))
         {
             endDate = endDate.AddDays(1);
@@ -65,6 +74,18 @@ return;
 
 
 #region calculate next endtime
+
+int TotalHolidays(DateTime startTime, DateTime endTime)
+{
+    var days = 0;
+    while(startTime <= endTime)
+    {
+        days += IsHoliday(startTime) ? 1 : 0;
+        startTime = startTime.AddDays(1);
+    }
+
+    return days;
+}
 
 /// <summary>
 /// Calculate next endtime base on starttime, minutes, woringday, holiday and weekend
@@ -149,12 +170,7 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
 }
 
 DateTime VerifyStartDate(DateTime startDate)
-{
-    while (IsHoliday(startDate))
-    {
-        startDate = startDate.AddDays(1);
-    }
-
+{    
     var dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == startDate.DayOfWeek);
 
     // Set the start and end hours and the lunch break for the current working day
