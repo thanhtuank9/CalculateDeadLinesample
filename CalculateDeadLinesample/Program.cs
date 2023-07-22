@@ -47,8 +47,7 @@ while(_continue == "y")
         DateTime endDate = CalculateEndTime(startDate, minutes);
         while (IsHoliday(endDate))
         {
-            startDate = VerifyStartDate(endDate.AddDays(1).Date);
-            endDate = CalculateEndTime(startDate, minutes);
+            endDate = endDate.AddDays(1);
         }
 
         Console.WriteLine("The end date and time is: " + endDate.ToString("yyyy-MM-dd HH:mm"));
@@ -149,15 +148,13 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
     return endDate;
 }
 
-DateTime ValidateEndDate(DateTime endDate)
-{
-    var dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == endDate.DayOfWeek);
-
-    return endDate;
-}
-
 DateTime VerifyStartDate(DateTime startDate)
 {
+    while (IsHoliday(startDate))
+    {
+        startDate = startDate.AddDays(1);
+    }
+
     var dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == startDate.DayOfWeek);
 
     // Set the start and end hours and the lunch break for the current working day
