@@ -181,6 +181,13 @@ DateTime VerifyStartDate(DateTime startDate)
 {    
     var dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == startDate.DayOfWeek);
 
+    while (IsHoliday(startDate))
+    {
+        startDate = startDate.AddDays(1).Date;
+        dayOfWeekSetting = workingHourSettings.FirstOrDefault(r => r.Day == startDate.DayOfWeek);
+        startDate = CombineWithHour(startDate, dayOfWeekSetting.WorkingHourStart);
+    }
+
     // Set the start and end hours and the lunch break for the current working day
     DateTime startWorkingDay = CombineWithHour(startDate, dayOfWeekSetting.WorkingHourStart);
     DateTime endWorkingDay = CombineWithHour(startDate, dayOfWeekSetting.WorkingHourEnd);
@@ -188,13 +195,13 @@ DateTime VerifyStartDate(DateTime startDate)
     DateTime breakEnd = CombineWithHour(startDate, dayOfWeekSetting.BreakHourEnd);
 
     // if it is during break time
-    if(startDate > breakStart && startDate < breakEnd) { return breakEnd; }
+    if (startDate > breakStart && startDate < breakEnd) { return breakEnd; }
 
     // if it is before start working day
     if (startDate < startWorkingDay) { return startWorkingDay; }
 
     // if it is after working day
-    if (startDate > endWorkingDay) 
+    if (startDate > endWorkingDay && startDate.Date == endWorkingDay.Date) 
     {
         var nextStartDate = startDate;
         // get start date for the next working day
