@@ -107,21 +107,26 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         DateTime endWorkingHour = CombineWithHour(endDate, dayOfWeekSetting.WorkingHourEnd);
         DateTime breakStart = CombineWithHour(endDate, dayOfWeekSetting.BreakHourStart);
         DateTime breakEnd = CombineWithHour(endDate, dayOfWeekSetting.BreakHourEnd);
-        double hoursBreak = dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
+        double hoursBreak = 0;// dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
+
+        if (startDate <= breakStart && endDate.AddMinutes(minutes) >= breakEnd)
+            hoursBreak = dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
 
 
         // Check if the current day is a working day (Monday to Friday)
         if (endDate.DayOfWeek != DayOfWeek.Saturday && endDate.DayOfWeek != DayOfWeek.Sunday)
         {
             // Calculate the remaining minutes for the current working day
-            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate - (breakEnd - breakStart);
+            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate;
+            if (startDate <= breakStart && endDate.AddMinutes(minutes) >= breakEnd)
+                remainingWorkingMinutes = remainingWorkingMinutes - (breakEnd - breakStart);
 
             if (remainingWorkingMinutes.TotalMinutes >= minutes)
             {
                 // If the remaining minutes are enough to finish, add the minutes and return
                 endDate = endDate.AddMinutes(minutes);
-                if(endDate > breakStart)
-                    endDate = endDate.AddHours(hoursBreak);
+                
+                endDate = endDate.AddHours(hoursBreak);
 
                 minutes = 0;
             }
@@ -138,14 +143,17 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         else if (endDate.DayOfWeek == DayOfWeek.Saturday)
         {
             // Calculate the remaining minutes for Saturday
-            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate - (breakEnd - breakStart);
+            TimeSpan remainingWorkingMinutes = endWorkingHour - endDate;
+            if (startDate <= breakStart && endDate.AddMinutes(minutes) >= breakEnd)
+                remainingWorkingMinutes = remainingWorkingMinutes - (breakEnd - breakStart);
 
             if (remainingWorkingMinutes.TotalMinutes >= minutes)
             {
                 // If the remaining minutes are enough to finish on Saturday, add the minutes and return
                 endDate = endDate.AddMinutes(minutes);
-                if (endDate > breakStart)
-                    endDate = endDate.AddHours(hoursBreak);
+                // if (endDate > breakStart)
+                
+                endDate = endDate.AddHours(hoursBreak);
 
                 minutes = 0;
             }
