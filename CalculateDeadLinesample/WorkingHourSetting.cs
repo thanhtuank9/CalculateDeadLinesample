@@ -6,11 +6,11 @@
 
         public DayOfWeek Day { get; set; }
 
-        public double WorkingHourStart { get; set; }
-        public double WorkingHourEnd { get; set; }
+        public TimeOnly WorkingHourStart { get; set; }
+        public TimeOnly WorkingHourEnd { get; set; }
 
-        public double BreakHourStart { get; set; }
-        public double BreakHourEnd { get; set; }
+        public TimeOnly BreakHourStart { get; set; }
+        public TimeOnly BreakHourEnd { get; set; }
 
         public bool IsOffWholeDay { get; set; }
     }

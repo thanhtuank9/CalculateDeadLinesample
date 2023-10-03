@@ -4,12 +4,12 @@ using CalculateDeadLinesample;
 List<WorkingHourSetting> workingHourSettings = new List<WorkingHourSetting>()
 {
     new WorkingHourSetting { Day = DayOfWeek.Sunday },
-    new WorkingHourSetting { Day = DayOfWeek.Monday, WorkingHourStart = 8, WorkingHourEnd = 18, BreakHourStart = 12, BreakHourEnd = 13 },
-    new WorkingHourSetting { Day = DayOfWeek.Tuesday, WorkingHourStart = 8, WorkingHourEnd = 18, BreakHourStart = 12, BreakHourEnd = 13 },
-    new WorkingHourSetting { Day = DayOfWeek.Wednesday , WorkingHourStart = 8, WorkingHourEnd = 18, BreakHourStart = 12, BreakHourEnd = 13},
-    new WorkingHourSetting { Day = DayOfWeek.Thursday , WorkingHourStart = 8, WorkingHourEnd = 18, BreakHourStart = 12, BreakHourEnd = 13},
-    new WorkingHourSetting { Day = DayOfWeek.Friday, WorkingHourStart = 8, WorkingHourEnd = 18, BreakHourStart = 12, BreakHourEnd = 13 },
-    new WorkingHourSetting { Day = DayOfWeek.Saturday , WorkingHourStart = 8, WorkingHourEnd = 12}
+    new WorkingHourSetting { Day = DayOfWeek.Monday, WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(18,0), BreakHourStart = new TimeOnly(12,0), BreakHourEnd = new TimeOnly(13,0) },
+    new WorkingHourSetting { Day = DayOfWeek.Tuesday, WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(18,0), BreakHourStart = new TimeOnly(12,0), BreakHourEnd = new TimeOnly(13,0) },
+    new WorkingHourSetting { Day = DayOfWeek.Wednesday , WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(18,0), BreakHourStart = new TimeOnly(12,0), BreakHourEnd = new TimeOnly(13,0)},
+    new WorkingHourSetting { Day = DayOfWeek.Thursday , WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(18,0), BreakHourStart = new TimeOnly(12,0), BreakHourEnd = new TimeOnly(13,0)},
+    new WorkingHourSetting { Day = DayOfWeek.Friday, WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(18,0), BreakHourStart = new TimeOnly(12,0), BreakHourEnd = new TimeOnly(13,0) },
+    new WorkingHourSetting { Day = DayOfWeek.Saturday , WorkingHourStart = new TimeOnly(8,0), WorkingHourEnd = new TimeOnly(12,0)}
 };
 
 List<HolidayDateSetting> holidayDateSettings = new List<HolidayDateSetting>()
@@ -110,7 +110,7 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         double hoursBreak = 0;// dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
 
         if (startDate <= breakStart && endDate.AddMinutes(minutes) >= breakStart)
-            hoursBreak = dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart;
+            hoursBreak = (dayOfWeekSetting.BreakHourEnd - dayOfWeekSetting.BreakHourStart).TotalHours;
 
 
         // Check if the current day is a working day (Monday to Friday)
@@ -170,7 +170,7 @@ DateTime CalculateEndTime(DateTime startDate, int minutes)
         else
         {
             // If it's a Sunday, move to the next Monday and set the start hour to 8:00 AM
-            endDate = endDate.AddDays(8 - (int)endDate.DayOfWeek).Date.AddHours(dayOfWeekSetting.WorkingHourStart);
+            endDate = endDate.AddDays(8 - (int)endDate.DayOfWeek).Date.AddHours(dayOfWeekSetting.WorkingHourStart.Hour).AddMinutes(dayOfWeekSetting.WorkingHourStart.Minute);
         }
     }
 
@@ -220,9 +220,9 @@ DateTime VerifyStartDate(DateTime startDate)
     return startDate;
 }
 
-DateTime CombineWithHour(DateTime date, double hours)
+DateTime CombineWithHour(DateTime date, TimeOnly hours)
 {
-    return date.Date.AddHours(hours);
+    return date.Date.AddHours(hours.Hour).AddMinutes(hours.Minute);
 }
 
 bool IsHoliday(DateTime date)
@@ -231,3 +231,8 @@ bool IsHoliday(DateTime date)
 }
 
 #endregion
+
+static TimeOnly ConvertToTimeOnly(int hour, int minute)
+{
+    return new TimeOnly(hour, minute);
+}
